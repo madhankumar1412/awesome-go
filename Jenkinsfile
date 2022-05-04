@@ -57,8 +57,11 @@ pipeline {
                         //sh "sudo yum install wget -y"
                         //sh "sudo wget https://github.com/mikefarah/yq/releases/download/v4.24.5/yq_linux_amd64 -O /usr/local/bin/yq &> /dev/null && \
                           //     sudo chmod +x /usr/local/bin/yq"
+			
+			sh "git config --global user.name \"jenkins\" && git config --global user.email jenkins@frbi.dev"
+                        sh "git commit -am \"JENKINS:Auto-commit\" && git push https://github.com/madhan1412/awesome-go.git"
 
-                        if (env.TAG_NAME == null && env.BRANCH_NAME == 'gitcheckin') {
+                       /* if (env.TAG_NAME == null && env.BRANCH_NAME == 'gitcheckin') {
 		                           print "inside if env.TAG_NAME = ${env.TAG_NAME}"
 
                                 VERSION = getVersion()
@@ -79,7 +82,7 @@ pipeline {
                         
                       else {
                               echo "No main branch or any tag found"
-                       }
+                       }*/
                                                    
                        
 
