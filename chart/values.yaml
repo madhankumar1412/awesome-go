@@ -9,7 +9,7 @@ rbi-cluster-admin:
       name: isla-application-registry-key
   nameOverride: "rbi-cluster-admin"
   rbi:
-    queue:                  # we do not need queue
+    queue:                  # we do not need queuee
       clientCertSecret: ""
     enableEventDispatcher: false
     refrencedServices: []
