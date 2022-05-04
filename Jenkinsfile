@@ -13,7 +13,7 @@ pipeline {
   environment { 
       ARTIFACTORY_CREDS = "aws-artifactory"
       ARTIFACTORY_REPO   = "rbi-docker.us-artifactory.cicd.cloud.fpdev.io"  
-      VERSION = 5.4.22
+      VERSION = "5.4.22"
        }
 
     stages {
