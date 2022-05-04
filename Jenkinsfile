@@ -48,6 +48,9 @@ pipeline {
              }*/
 
         stage("Build cluster admin Container Image"){
+	when {
+		changeset "**/chart/**"
+		}
             steps {
                 script { 
                         sh "echo rbc-cluster-admin"
