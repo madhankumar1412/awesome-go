@@ -58,9 +58,9 @@ pipeline {
                         echo "Commit=${env.GIT_COMMIT}"
                         echo "Building ${env.TAG_NAME}"
                         //echo "TAG_NAME is ${TAG_NAME}"
-                        sh "sudo yum install wget -y"
-                        sh "sudo wget https://github.com/mikefarah/yq/releases/download/v4.24.5/yq_linux_amd64 -O /usr/local/bin/yq &> /dev/null && \
-                              sudo chmod +x /usr/local/bin/yq"
+                        sh " yum install wget -y"
+                        sh " wget https://github.com/mikefarah/yq/releases/download/v4.24.5/yq_linux_amd64 -O /usr/local/bin/yq &> /dev/null 
+                        sh  "chmod +x /usr/local/bin/yq"
 			sh "yq -i '.rbi-cluster-admin.image.tag = \"${VERSION}\"' ./chart/values.yaml"
 			
 			sh "git config --global user.name \"jenkins\" && git config --global user.email jenkins@frbi.dev"
