@@ -1,0 +1,66 @@
+rbi-cluster-admin:
+  enabled: true
+  image:
+    repository: rbi-docker.us-artifactory.cicd.cloud.fpdev.io/rbc-cluster-admin
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+    imagePullSecrets: 
+      name: isla-application-registry-key
+  nameOverride: "rbi-cluster-admin"
+  rbi:
+    queue:                  # we do not need queue
+      clientCertSecret: ""
+    enableEventDispatcher: false
+    refrencedServices: []
+    dependentServices:
+      - mariadb
+    volumes: 
+      - name: rbc-cluster-storage-vol
+        claimName: rbc-cluster-storage-pvc
+      - name: rbc-podspec-template
+        configMapName: rbc-podspec-template
+      - name: rbc-wss-cert
+        secretName: rbc-wss-cert
+    volumeMounts:
+      - path: /var/storage/
+        name: rbc-cluster-storage-vol
+        subPath: files
+      - path: /var/data/rbc
+        name: rbc-podspec-template
+      - path: "/var/data/rbc/wss-cert"
+        name: rbc-wss-cert
+    envVars:
+      - name: ISLA_AUTHKEY_GENERATION_INTERVAL
+        value: "180"
+      - name: ISLA_DB_NAMING_STRATEGY_IS_SINGULAR
+        value: "true"
+      - name: ISLA_RBC_PROXYBASE_URL
+        value: https://$(ISLA_RBC_PROXYBASE_DOMAIN)
+      - name: ISLA_DB_NAME
+        value: isla_rbc_cluster
+    envVarsFromConfig:
+      - name:  ISLA_VIRTUAL_APPLIANCE_KEY
+        key: applianceKey
+        configMapName: cluster-config
+      - name:  ISLA_RBC_IMAGE_REGISTRY
+        key: rbcImageRegistry
+        configMapName: cluster-config
+      - name:  ISLA_RBC_PROXYBASE_DOMAIN
+        key: apiProxyDomain
+        configMapName: cluster-config
+      - name:  ISLA_RBC_HOSTNAME_SUFFIX
+        key: rbcDomainSuffix
+        configMapName: cluster-config
+      # - name: ISLA_BACKEND_API_BASE_URL       # Not required as service template sets this
+      #   key: backendAPIURL
+      #   configMapName: cluster-config
+      - name: ISLA_RBC_CLUSTER_NAMESPACE
+        key: namespace
+        configMapName: cluster-config
+  ingress:
+    enabled: true
+    paths: 
+      - /appliances/current/nodes/nodeId/states
+      - /appliances/current/nodes/nodeId
+      - /tenants
