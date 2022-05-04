@@ -12,7 +12,8 @@ pipeline {
 
   environment { 
       ARTIFACTORY_CREDS = "aws-artifactory"
-      ARTIFACTORY_REPO   = "rbi-docker.us-artifactory.cicd.cloud.fpdev.io"    
+      ARTIFACTORY_REPO   = "rbi-docker.us-artifactory.cicd.cloud.fpdev.io"  
+      VERSION = 5.4.22
        }
 
     stages {
@@ -57,9 +58,10 @@ pipeline {
                         echo "Commit=${env.GIT_COMMIT}"
                         echo "Building ${env.TAG_NAME}"
                         //echo "TAG_NAME is ${TAG_NAME}"
-                        //sh "sudo yum install wget -y"
-                        //sh "sudo wget https://github.com/mikefarah/yq/releases/download/v4.24.5/yq_linux_amd64 -O /usr/local/bin/yq &> /dev/null && \
-                          //     sudo chmod +x /usr/local/bin/yq"
+                        sh "sudo yum install wget -y"
+                        sh "sudo wget https://github.com/mikefarah/yq/releases/download/v4.24.5/yq_linux_amd64 -O /usr/local/bin/yq &> /dev/null && \
+                              sudo chmod +x /usr/local/bin/yq"
+			sh "yq -i '.rbi-cluster-admin.image.tag = \"${VERSION}\"' ./chart/values.yaml"
 			
 			sh "git config --global user.name \"jenkins\" && git config --global user.email jenkins@frbi.dev"
                         sh "git commit -am \"JENKINS:Auto-commit\" && git push https://github.com/madhan1412/awesome-go.git"
