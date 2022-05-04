@@ -3,7 +3,7 @@ rbi-cluster-admin:
   image:
     repository: rbi-docker.us-artifactory.cicd.cloud.fpdev.io/rbc-cluster-admin
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
+    # Overrides the image tag whose default is the chart appVersionn.
     tag: "latest"
     imagePullSecrets: 
       name: isla-application-registry-key
