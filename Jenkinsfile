@@ -7,7 +7,7 @@ pipeline {
     agent any
     
   options {
-  buildDiscarder logRotator(daysToKeepStr: '', numToKeepStr: '15')
+  buildDiscarder logRotator(daysToKeepStr: '', numToKeepStr: '12')
   }
 
   environment { 
@@ -62,10 +62,15 @@ pipeline {
                         //sh " wget https://github.com/mikefarah/yq/releases/download/v4.24.5/yq_linux_amd64 -O /usr/local/bin/yq &> /dev/null 
                         //sh  "chmod +x /usr/local/bin/yq"
 			//sh "yq -i '.rbi-cluster-admin.image.tag = \"${VERSION}\"' ./chart/values.yaml"
-			 sh "sed 's/unix/linux/g' ./chart/file.txt"
+			
+
+			 sh "git checkout main"
+			  sh "git remote add origin https://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@github.com/madhankumar1412/awesome-go.git/madhankumar1412/awesome-go"
+                       
+			 sh "sed -i 's/unix/linux/g' ./chart/file.txt"
 			
 			sh "git config --global user.name \"jenkins\" && git config --global user.email jenkins@frbi.dev"
-                        sh "git commit -am \"JENKINS:Auto-commit\" && git push https://github.com/madhan1412/awesome-go.git"
+                        sh "git commit -am \"JENKINS:Auto-commit\" && git branch && git push origin main"
 
                        /* if (env.TAG_NAME == null && env.BRANCH_NAME == 'gitcheckin') {
 		                           print "inside if env.TAG_NAME = ${env.TAG_NAME}"
